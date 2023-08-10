@@ -13,8 +13,13 @@
 </head>
 
 <body>
-    <div id="app">
-        <!-- <div class="toast-container position-absolute p-3 top-0 end-0" id="toastPlacement">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <div id="app" v-cloak>
+        <div class="toast-container position-absolute p-3 top-0 end-0" id="toastPlacement">
             <div id="danger-toast" data-bs-delay="2000" class="toast align-items-center text-white bg-danger border-0"
                 role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
@@ -25,11 +30,11 @@
                         aria-label="Close"></button>
                 </div>
             </div>
-        </div> -->
+        </div>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-2 col-md-2 col-sm-2">
-                    <div class="column-options">
+                    <div class="column-options2">
                         <a href="/web/accounts.html"
                             class="link-dark text-decoration-none" id="a-img">
                             <img class="menu-logo" src="img/Mindhub-logo.png">
@@ -67,27 +72,49 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-10 col-md-10 col-sm-10" id="column-body">
+                <div class="col">
                     <div class="row">
-                        <p class="display-1">Bienvenido/a, {{ clientInfo.firstName }} {{ clientInfo.lastName }}</p>
+                        <div class="col">
+                            <p class="display-1">Bienvenido/a, {{ clientInfo.firstName }} {{ clientInfo.lastName }}</p>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="banner">
-                            
+                        </div>
+                        <div class="col">
+                            <h2 class="display-6 subtitle">Accounts</h2>
                         </div>
                         <div class="row" id="cards-accounts">
-                            <div v-for="{id, number, creationDate, balance} in clientInfo.accounts"
-                                class="col-12 col-md-4 mt-2 ">
-                                <a class="account-link" v-bind:href="'/web/account.html?id='+id">
+                            <div v-for="account in clientInfo.accounts" class="col-12 col-md-4 mt-2 ">
+                                <a class="account-link" v-bind:href="'/web/account.html?id='+account.id">
                                     <div class="card border-0 account">
                                         <div class="card-body">
-                                            <h5 class="card-title">Account number: {{ number }}</h5>
-                                            <p class="text-center lead account-balance">Balance: ${{ balance }} </p>
-                                            <p class="card-text">Creation Date: {{ formatDate(creationDate) }}</p>
-                                            
+                                            <h5 class="card-title">Account number: {{ account.number }}</h5>
+                                            <p class="text-center lead account-balance">Balance: ${{ account.balance }}
+                                            </p>
+                                            <p class="card-text">Creation date: {{ formatDate(account.creationDate) }}
+                                            </p>
                                         </div>
                                     </div>
                                 </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h2 class="display-6">Loans</h2>
+                                <span class="small" v-if="clientInfo.loan != null && clientInfo.loans.length <= 0">No
+                                    loans</span>
+                            </div>
+                        </div>
+                        <div class="row" id="cards-accounts">
+                            <div v-for="loan in clientInfo.loans" class="col-12 col-md-4 mt-2">
+                                <div class="card border-0 loan">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ loan.name }}</h5>
+                                        <p class="card-text"> Payments: {{ loan.payments}}</p>
+                                        <p class="text-center lead account-balance"> ${{ loan.amount }} </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

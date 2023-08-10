@@ -14,7 +14,6 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
-
     private String number;
     private LocalDate creationDate;
     private double balance;
@@ -33,53 +32,41 @@ public class Account {
         this.creationDate = creationDate;
         this.balance = balance;
     }
-
     public long getId() {
         return id;
     }
-
     public String getNumber() {
         return number;
     }
-
     public void setNumber(String number) {
         this.number = number;
     }
-
     public LocalDate getCreationDate() {
         return creationDate;
     }
-
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
-
     public double getBalance() {
         return balance;
     }
-
     public void setBalance(double balance) {
         this.balance = balance;
     }
-
     @JsonIgnore
     public Client getClient() {
         return client;
     }
-
     public Set<Transaction> getTransactions() {
         return transactions;
     }
-
     public void addTransactions(Transaction transaction) {
         transaction.setAccount(this);
         transactions.add(transaction);
     }
-
     public void setClient(Client client) {
 
         this.client = client;
     }
-
 
 }
