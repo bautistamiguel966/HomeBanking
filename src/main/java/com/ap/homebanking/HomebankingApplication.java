@@ -17,11 +17,9 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository) {
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		return (args) -> {
 
-			//clientRepository.save(new Client("Melba", "Morel", "melba@mindhub.com"));
-			//clientRepository.save(new Client("Rocio", "Diaz", "rocio@mindhub.com"));
 
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
 			Client client2 = new Client("Rocio", "Diaz", "rocio@mindhub.com");
@@ -52,6 +50,19 @@ public class HomebankingApplication {
 			ClientLoan clientLoan2 = new ClientLoan(50000, 12);
 			ClientLoan clientLoan3 = new ClientLoan(100000, 24);
 			ClientLoan clientLoan4 = new ClientLoan(200000, 36);
+
+			//Tarjetas para Melba
+			Card card1 = new Card(CardType.DEBIT, ColorType.GOLD, 123123123, 123, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card2 = new Card(CardType.CREDIT, ColorType.TITANIUM, 123123155, 456, LocalDate.now(), LocalDate.now().plusYears(5));
+			//Tarjeta para Rocio
+			Card card3 = new Card(CardType.CREDIT, ColorType.SILVER, 443123155, 789, LocalDate.now(), LocalDate.now().plusYears(5));
+
+			//Se le asignan las tarjetas a Melba
+			client1.addCard(card1);
+			client1.addCard(card2);
+
+			//Se le asigna su tarjeta a Rocio
+			client2.addCard(card3);
 
 			//Se le asigna a Melba, sus dos prestamos
 			client1.addClientLoans(clientLoan1);
@@ -110,6 +121,10 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan2);
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
+
+			cardRepository.save(card1);
+			cardRepository.save(card2);
+			cardRepository.save(card3);
 		};
 	}
 

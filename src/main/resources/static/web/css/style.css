@@ -178,3 +178,35 @@ table td{
 .debit-transaction td{
     color: red;
 }
+
+#row-credit, #row-debit{
+    /* background-color: #eaf4f4; */
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+#card-credit, #card-debit{
+    border-radius: 2%;
+    width: 24vw;
+    display: flex;
+    flex-direction: column;
+}
+
+#card-debit{
+    background-color: silver;
+}
+
+#card-credit{
+    background-color: rgb(35, 32, 13);
+    color: #eaf4f4;
+}
+
+.titulo-card, #expira{
+    text-align: end;
+}
+
+.expira-cvv{
+    display: flex;
+    justify-content: space-around;
+}
