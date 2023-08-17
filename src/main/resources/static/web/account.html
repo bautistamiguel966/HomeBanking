@@ -13,13 +13,13 @@
 </head>
 
 <body>
-    <!-- <style>
+    <style>
         [v-cloak] {
             display: none;
         }
-    </style> -->
+    </style>
     <div id="app" v-cloak>
-        <!-- <div class="toast-container position-absolute p-3 top-0 end-0" id="toastPlacement">
+        <div class="toast-container position-absolute p-3 top-0 end-0" id="toastPlacement">
             <div id="danger-toast" data-bs-delay="2000" class="toast align-items-center text-white bg-danger border-0"
                 role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
@@ -30,114 +30,104 @@
                         aria-label="Close"></button>
                 </div>
             </div>
-        </div> -->
+        </div>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <div class="column-options2">
-                        <a href="/web/accounts.html" class="link-dark text-decoration-none" id="a-img">
-                            <img class="menu-logo" src="img/Mindhub-logo.png">
-                        </a>
-                        <ul class="nav nav-pills">
-                            <li class="nav-item">
-                                <a href="/web/accounts.html" class="nav-link active">
-                                    <i class="bi bi-inboxes"></i>
-                                    Accounts
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/cards.html" class="nav-link link-dark">
-                                    <i class="bi bi-credit-card"></i>
-                                    Cards
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/transfers.html" class="nav-link link-dark">
-                                    <i class="bi bi-box-arrow-right"></i>
-                                    Transfers
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/loan-application.html" class="nav-link link-dark">
-                                    <i class="bi bi-cash"></i>
-                                    Loans
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="nav nav-pills">
-                            <button class="btn btn-danger img-fluid">Sign out</button>
-                        </ul>
-                    </div>
+            <div class="row" id="header">
+                <div class="col-lg-3" id="logo">
+                    <a href="/web/accounts.html">
+                        <img class="menu-logo" src="img/Mindhub-logo.png">
+                    </a>
                 </div>
-                <div class="col-lg-10 col-md-10 col-sm-10" id="column-body">
-                    <div class="row">
-                        <div class="col">
-                            <h1 class="display-1">Account {{accountInfo.number}} details</h1>
-                        </div>
-                    </div>
-                    <div class="banner">
-                    </div>
-                    <div class="row" id="cards-accounts">
-                        <div class="col-12 col-md-4 mt-2 ">
-                            <a>
-                                <div class="card border-0 account">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Account number: {{ accountInfo.number }}</h5>
-                                        <p class="text-center lead account-balance">Balance: ${{ accountInfo.balance }}
-                                        </p>
-                                        <p class="card-text">Creation Date: {{ formatDate(accountInfo.creationDate) }}
-                                        </p>
-                                    </div>
-                                </div>
+                <div class="col-lg-5" id="opciones">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a href="/web/accounts.html" class="nav-link">
+                                <i class="bi bi-inboxes"></i>
+                                Accounts
                             </a>
-                        </div>
-                    </div>
-                <div class="row">
-                    <div class="col">
-                        <h2>Transactions</h2>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(transaction, index) in accountInfo.transactions"
-                                    v-bind:class="[ transaction.type == 'CREDIT' ? 'credit-transaction' : 'debit-transaction' ]">
-                                    <td>{{ transaction.type }}</td>
-                                    <td>{{ transaction.amount }}</td>
-                                    <td>{{ formatDate(transaction.date) }}</td>
-                                    <td>{{ transaction.description }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/cards.html" class="nav-link link-dark">
+                                <i class="bi bi-credit-card"></i>
+                                Cards
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/transfers.html" class="nav-link link-dark">
+                                <i class="bi bi-box-arrow-right"></i>
+                                Transfers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/loan-application.html" class="nav-link link-dark">
+                                <i class="bi bi-cash"></i>
+                                Loans
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-danger" v-on:click="signOut">Sign out</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div>
-                <div class="row" id="footer">
-                    <div class="col-lg-6 col-md-6 col-sm-6" id="rights">
-                        <p>&copy 2023 - All rights reserved</p>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="social">
-                            <a href="https://www.instagram.com/" class="nav-link link-dark" target="_blank">
-                                <i class="bi bi-instagram h2"></i>
-                            </a>
-                            <a href="https://www.facebook.com/" class="nav-link link-dark" target="_blank">
-                                <i class="bi bi-facebook h2"></i>
-                            </a>
-                            <a href="https://www.Whatsapp.com/" class="nav-link link-dark" target="_blank">
-                                <i class="bi bi-whatsapp h2"></i>
-                            </a>
-                        </div>
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-1">Account details</h1>
+                </div>
+            </div>
+            <div class="row" id="row-banner">
+                <div class="col-lg-8" id="banner"></div>
+            </div>
+            <div class="row mt-3" id="detalle-account">
+                <div class="col-lg-8">
+                    <h2 class="display-6 account">Account Number: {{ accountInfo.number }} - Balance: ${{
+                        accountInfo.balance }}</h2>
+                </div>
+            </div>
+            <div class="row mt-3" id="transacciones">
+                <h2>Transactions</h2>
+                <div class="col-lg-8">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(transaction, index) in accountInfo.transactions"
+                                v-bind:class="[ transaction.type == 'CREDIT' ? 'credit-transaction' : 'debit-transaction' ]">
+                                <td>{{ transaction.type }}</td>
+                                <td>{{ transaction.amount }}</td>
+                                <td>{{ formatDate(transaction.date) }}</td>
+                                <td>{{ transaction.description }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row" id="footer">
+                <div class="col-lg-6 col-md-6 col-sm-6" id="rights">
+                    <p>&copy 2023 - All rights reserved</p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="social">
+                        <a href="https://www.instagram.com/" class="nav-link link-dark" target="_blank">
+                            <i class="bi bi-instagram h2"></i>
+                        </a>
+                        <a href="https://www.facebook.com/" class="nav-link link-dark" target="_blank">
+                            <i class="bi bi-facebook h2"></i>
+                        </a>
+                        <a href="https://www.Whatsapp.com/" class="nav-link link-dark" target="_blank">
+                            <i class="bi bi-whatsapp h2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>

@@ -14,12 +14,7 @@
 </head>
 
 <body>
-    <style>
-        [v-cloak] {
-            display: none;
-        }
-    </style>
-    <div id="app" v-cloak>
+    <div id="app">
         <div class="toast-container position-absolute p-3 top-0 end-0" id="toastPlacement">
             <div id="danger-toast" data-bs-delay="2000" class="toast align-items-center text-white bg-danger border-0"
                 role="alert" aria-live="assertive" aria-atomic="true">
@@ -33,128 +28,128 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="row mt-5">
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <div class="column-options2">
-                        <a href="/web/accounts.html"
-                            class="link-dark text-decoration-none" id="a-img">
-                            <img class="menu-logo" src="img/Mindhub-logo.png">
-                        </a>
-                        
-                        <ul class="nav nav-pills">
-                            <li class="nav-item">
-                                <a href="/web/accounts.html" class="nav-link active">
-                                    <i class="bi bi-inboxes"></i>
-                                    Accounts
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/cards.html" class="nav-link link-dark">
-                                    <i class="bi bi-credit-card"></i>
-                                    Cards
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/transfers.html" class="nav-link link-dark">
-                                    <i class="bi bi-box-arrow-right"></i>
-                                    Transfers
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/loan-application.html" class="nav-link link-dark">
-                                    <i class="bi bi-cash"></i>
-                                    Loans
-                                </a>
-                            </li>
-                        </ul>
-                        
-                        <ul class="nav nav-pills">
-                            <button class="btn btn-danger img-fluid">Sign out</button>
-                        </ul>
+            <div class="row" id="header">
+                <div class="col-lg-3" id="logo">
+                    <a href="/web/accounts.html">
+                    <img class="menu-logo" src="img/Mindhub-logo.png">
+                    </a>
+                </div>
+                <div class="col-lg-5" id="opciones">
+                    <ul class="nav nav-pills">
+                        <li  class="nav-item">
+                            <a href="/web/accounts.html" class="nav-link">
+                                <i class="bi bi-inboxes"></i>
+                                Accounts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/cards.html" class="nav-link link-dark active">
+                                <i class="bi bi-credit-card"></i>
+                                Cards
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/transfers.html" class="nav-link link-dark">
+                                <i class="bi bi-box-arrow-right"></i>
+                                Transfers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/loan-application.html" class="nav-link link-dark">
+                                <i class="bi bi-cash"></i>
+                                Loans
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-danger" v-on:click="signOut">Sign out</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-1">{{ clientInfo.firstName }} {{ clientInfo.lastName }}</h1>
+                </div>
+            </div>
+            <div class="row" id="row-banner">
+                <div class="col-lg-8" id="banner"></div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <h2 class="display-6">Debit Cards</h2>
+                    <div v-if="debitCards.length <= 0"><h2 class="small">No debit cards</h2></div>
+                </div>
+            </div>
+            <div class="row" id="tarjetas-debito">
+                <div v-for="card in debitCards" class="plastic-card col-8 col-md-3 mt-2">
+                    <div
+                        v-bind:class="['plastic-card__front', 'plastic-card__part', card.color.toLowerCase() +'-plastic-card']">
+                        <div class="plastic-card__square">
+                            <span class="plastic-card__label">{{ card.type}} {{ card.color }}</span>
+                        </div>
+                        <img class="plastic-card__front-logo plastic-card__logo" src="img/Mindhub-logo.png">
+                        <p class="plastic-card_numer">{{ card.number}}</p>
+                        <div class="plastic-card__space-60">
+                            <span class="plastic-card__label">card holder</span>
+                            <p class="plastic-card__info">{{ card.cardHolder }}</p>
+                        </div>
+                        <div class="plastic-card__space-25">
+                            <span class="plastic-card__label">Expires</span>
+                            <p class="plastic-card__info">{{ formatDate(card.thruDate) }}</p>
+                        </div>
+                    </div>
+
+                    <div
+                        v-bind:class="['plastic-card__back', 'plastic-card__part', card.color.toLowerCase() +'-plastic-card']">
+                        <div class="plastic-card__black-line"></div>
+                        <div class="plastic-card__back-content">
+                            <div class="plastic-card__secret">
+                                <p class="plastic-card__secret--last">{{ card.cvv}}</p>
+                            </div>
+                            <div class="plastic-card__back-square plastic-card__square">
+                                <span class="plastic-card__label">{{ card.type}} {{ card.color }}</span>
+                            </div>
+                            <img class="plastic-card__back-logo plastic-card__logo" src="img/Mindhub-logo.png">
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="row mt-3">
                 <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <h1 class="display-1">{{ clientInfo.firstName }} {{ clientInfo.lastName }}</h1>
+                    <h2 class="display-6">Credit Cards</h2>
+                    <h2 class="small" v-if="creditCards.length <= 0">No credit cards</h2>
+                </div>
+            </div>
+            <div class="row" id="tarjetas-credito">
+                <div v-for="card in creditCards" class="plastic-card col-8 col-md-3 mt-2">
+                    <div
+                        v-bind:class="['plastic-card__front', 'plastic-card__part', card.color.toLowerCase() +'-plastic-card']">
+                        <div class="plastic-card__square">
+                            <span class="plastic-card__label">{{ card.type}} {{ card.color }}</span>
+                        </div>
+                        <img class="plastic-card__front-logo plastic-card__logo" src="img/Mindhub-logo.png">
+                        <p class="plastic-card_numer">{{ card.number}}</p>
+                        <div class="plastic-card__space-60">
+                            <span class="plastic-card__label">card holder</span>
+                            <p class="plastic-card__info">{{ card.cardHolder }}</p>
+                        </div>
+                        <div class="plastic-card__space-25">
+                            <span class="plastic-card__label">Expires</span>
+                            <p class="plastic-card__info">{{ formatDate(card.thruDate) }}</p>
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col">
-                            <h2 class="display-6 subtitle">Debit Cards</h2>
-                            <div v-if="debitCards.length <= 0"><span class="small">No debit cards</span></div>
-                        </div>
-                    </div>
-                    <div class="row" id="row-debit">
-                        <div v-for="card in debitCards" class="plastic-card col-12 col-md-3 mt-2" id="card-debit">
-                            <h3 class="titulo-card">DEBIT CARD</h3>
-                            <div
-                                v-bind:class="['plastic-card__front', 'plastic-card__part', card.color.toLowerCase() +'-plastic-card']">
-                                <div class="plastic-card__square">
-                                    <span class="plastic-card__label">{{ card.type}} {{ card.color }}</span>
-                                </div>
-                                
-                                <div class="plastic-card__space-60">
-                                    <h4 class="plastic-card__info">{{ card.cardHolder }}</h4>
-                                </div>
-                                <p class="plastic-card_numer">{{ card.number}}</p>
-                                <div class="expira-cvv">
-                                    <p class="plastic-card__secret--last">{{ card.cvv}}</p>
-                                    <div class="plastic-card__space-25" id="expira">
-                                        <span class="plastic-card__label">Expires</span>
-                                        <p class="plastic-card__info">{{ formatDate(card.thruDate) }}</p>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- <div
-                                v-bind:class="['plastic-card__back', 'plastic-card__part', card.color.toLowerCase() +'-plastic-card']">
-                                <div class="plastic-card__black-line"></div>
-                                <div class="plastic-card__back-content">
-                                    <div class="plastic-card__secret">
-                                        <p class="plastic-card__secret--last">{{ card.cvv}}</p>
-                                    </div>
-                                </div>
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col">
-                            <h2 class="display-6">Credit Cards</h2>
-                            <span class="small" v-if="creditCards.length <= 0">No credit cards</span>
-                        </div>
-                    </div>
-                    <div class="row" id="row-credit">
-                        <div v-for="card in creditCards" class="plastic-card col-12 col-md-3 mt-2" id="card-credit">
-                            <h3 class="titulo-card">CREDIT CARD</h3>
-                            <div
-                                v-bind:class="['plastic-card__front', 'plastic-card__part', card.color.toLowerCase() +'-plastic-card']">
-                                <div class="plastic-card__square">
-                                    <span class="plastic-card__label">{{ card.type}} {{ card.color }}</span>
-                                </div>
-                                
-                                <div class="plastic-card__space-60">
-                                    <h4 class="plastic-card__info">{{ card.cardHolder }}</h4>
-                                </div>
-                                <p class="plastic-card_numer">{{ card.number}}</p>
-                                <div class="expira-cvv">
-                                    <p class="plastic-card__secret--last">{{ card.cvv}}</p>
-                                    <div class="plastic-card__space-25" id="expira">
-                                        <span class="plastic-card__label">Expires</span>
-                                        <p class="plastic-card__info">{{ formatDate(card.thruDate) }}</p>
-                                    </div>
-                                </div>
+                    <div
+                        v-bind:class="['plastic-card__back', 'plastic-card__part', card.color.toLowerCase() +'-plastic-card']">
+                        <div class="plastic-card__black-line"></div>
+                        <div class="plastic-card__back-content">
+                            <div class="plastic-card__secret">
+                                <p class="plastic-card__secret--last">{{ card.cvv}}</p>
                             </div>
-<!-- 
-                            <div
-                                v-bind:class="['plastic-card__back', 'plastic-card__part', card.color.toLowerCase() +'-plastic-card']">
-                                <div class="plastic-card__black-line"></div>
-                                <div class="plastic-card__back-content">
-                                    <div class="plastic-card__secret">
-                                        
-                                    </div>
-                                </div>
-                            </div> -->
+                            <div class="plastic-card__back-square plastic-card__square">
+                                <span class="plastic-card__label">{{ card.type}} {{ card.color }}</span>
+                            </div>
+                            <img class="plastic-card__back-logo plastic-card__logo" src="img/Mindhub-logo.png">
                         </div>
                     </div>
                 </div>

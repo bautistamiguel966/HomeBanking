@@ -32,90 +32,85 @@
             </div>
         </div>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-2">
-                    <div class="column-options2">
-                        <a href="/web/accounts.html"
-                            class="link-dark text-decoration-none" id="a-img">
-                            <img class="menu-logo" src="img/Mindhub-logo.png">
-                        </a>
-                        
-                        <ul class="nav nav-pills">
-                            <li class="nav-item">
-                                <a href="/web/accounts.html" class="nav-link active">
-                                    <i class="bi bi-inboxes"></i>
-                                    Accounts
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/cards.html" class="nav-link link-dark">
-                                    <i class="bi bi-credit-card"></i>
-                                    Cards
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/transfers.html" class="nav-link link-dark">
-                                    <i class="bi bi-box-arrow-right"></i>
-                                    Transfers
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/web/loan-application.html" class="nav-link link-dark">
-                                    <i class="bi bi-cash"></i>
-                                    Loans
-                                </a>
-                            </li>
-                        </ul>
-                        
-                        <ul class="nav nav-pills">
-                            <button class="btn btn-danger img-fluid">Sign out</button>
-                        </ul>
-                    </div>
+            <div class="row" id="header">
+                <div class="col-lg-3" id="logo">
+                    <a href="/web/accounts.html">
+                    <img class="menu-logo" src="img/Mindhub-logo.png">
+                    </a>
                 </div>
+                <div class="col-lg-5" id="opciones">
+                    <ul class="nav nav-pills">
+                        <li  class="nav-item">
+                            <a href="/web/accounts.html" class="nav-link active">
+                                <i class="bi bi-inboxes"></i>
+                                Accounts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/cards.html" class="nav-link link-dark">
+                                <i class="bi bi-credit-card"></i>
+                                Cards
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/transfers.html" class="nav-link link-dark">
+                                <i class="bi bi-box-arrow-right"></i>
+                                Transfers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/web/loan-application.html" class="nav-link link-dark">
+                                <i class="bi bi-cash"></i>
+                                Loans
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-danger" v-on:click="signOut">Sign out</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col">
-                    <div class="row">
-                        <div class="col">
-                            <p class="display-1">Bienvenido/a, {{ clientInfo.firstName }} {{ clientInfo.lastName }}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="banner">
-                        </div>
-                        <div class="col">
-                            <h2 class="display-6 subtitle">Accounts</h2>
-                        </div>
-                        <div class="row" id="cards-accounts">
-                            <div v-for="account in clientInfo.accounts" class="col-12 col-md-4 mt-2 ">
-                                <a class="account-link" v-bind:href="'/web/account.html?id='+account.id">
-                                    <div class="card border-0 account">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Account number: {{ account.number }}</h5>
-                                            <p class="text-center lead account-balance">Balance: ${{ account.balance }}
-                                            </p>
-                                            <p class="card-text">Creation date: {{ formatDate(account.creationDate) }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
+                    <h1 class="display-1">Bienvenido/a {{ clientInfo.firstName }} {{ clientInfo.lastName }}</h1>
+                </div>
+            </div>
+            <div class="row" id="row-banner">
+                <div class="col-lg-8" id="banner"></div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <h2 class="display-6">Accounts</h2>
+                </div>
+            </div>
+            <div class="row mx-2" id="cards-account">
+                <div v-for="account in clientInfo.accounts" class="col-12 col-md-4 mt-2 ">
+                    <a class="account-link" v-bind:href="'/web/account.html?id='+account.id">
+                        <div class="card border-0 account">
+                            <div class="card-body">
+                                <h5 class="card-title">Account number: {{ account.number }}</h5>
+                                <p class="card-text">Creation date:  {{ formatDate(account.creationDate) }}</p>
+                                <p class="text-center lead account-balance"> ${{ account.balance }} </p>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <h2 class="display-6">Loans</h2>
-                                <span class="small" v-if="clientInfo.loan != null && clientInfo.loans.length <= 0">No
-                                    loans</span>
-                            </div>
-                        </div>
-                        <div class="row" id="cards-accounts">
-                            <div v-for="loan in clientInfo.loans" class="col-12 col-md-4 mt-2">
-                                <div class="card border-0 loan">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ loan.name }}</h5>
-                                        <p class="card-text"> Payments: {{ loan.payments}}</p>
-                                        <p class="text-center lead account-balance"> ${{ loan.amount }} </p>
-                                    </div>
-                                </div>
-                            </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <h2 class="display-6">Loans</h2>
+                    <span class="small" v-if="clientInfo.loan != null && clientInfo.loans.length <= 0">No
+                        loans</span>
+                </div>
+            </div>
+            <div class="row mx-2"  id="cards-loan">
+                <div v-for="loan in clientInfo.loans" class="col-12 col-md-4 mt-2">
+                    <div class="card border-0 loan">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ loan.name }}</h5>
+                            <p class="card-text"> payments: {{ loan.payments}}</p>
+                            <p class="text-center lead account-balance"> ${{ loan.amount }} </p>
                         </div>
                     </div>
                 </div>
