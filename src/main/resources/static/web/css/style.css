@@ -239,6 +239,22 @@ h2{
     align-self: center;
 }
 
+#col-img-transfer{
+    width:40%;
+    height:500px;
+    background-image: url('/web/img/transfer-2.jpg');
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+#row-transfer{
+    display: flex;
+    justify-content: space-around;
+    margin: 2.9%;
+}
+
+
 @media (max-width: 450px) {
 .h-custom {
 height: 100%;

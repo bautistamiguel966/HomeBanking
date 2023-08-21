@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -37,6 +39,11 @@ public class AccountController {
         return accountRepository.findById(id).map(account -> new AccountDTO(account)).orElse(null);
     }
 
+    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.GET)
+    public ResponseEntity<Set<AccountDTO>> getAccounts(Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        return ResponseEntity.ok(client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(Collectors.toSet()));
+    }
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 

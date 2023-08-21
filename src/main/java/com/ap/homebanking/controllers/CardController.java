@@ -1,5 +1,7 @@
 package com.ap.homebanking.controllers;
 
+import com.ap.homebanking.dtos.AccountDTO;
+import com.ap.homebanking.dtos.CardDTO;
 import com.ap.homebanking.models.*;
 import com.ap.homebanking.repositories.CardRepository;
 import com.ap.homebanking.repositories.ClientRepository;
@@ -13,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -27,6 +28,11 @@ public class CardController {
     private CardRepository cardRepository;
 
 
+    @RequestMapping(path = "/clients/current/cards", method = RequestMethod.GET)
+    public ResponseEntity<Set<CardDTO>> getCards(Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        return ResponseEntity.ok(client.getCards().stream().map(card -> new CardDTO(card)).collect(Collectors.toSet()));
+    }
     @RequestMapping(path = "/clients/current/cards", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication, @RequestParam CardColor cardColor, @RequestParam CardType cardType) {
 
