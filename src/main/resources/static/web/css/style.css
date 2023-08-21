@@ -210,6 +210,35 @@ h2{
     justify-content: center;
 }
 
+
+/* CREAR CARD */
+#crear-card{
+    display: flex;
+    justify-content: center;
+}
+#crear-card form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#col-crear{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    background-color: #e7c6ff;
+    height: 74.5vh;
+}
+#create-card{
+    width: 50%;
+    align-self: center;
+}
+
+#create{
+    width: 15%;
+    align-self: center;
+}
+
 @media (max-width: 450px) {
 .h-custom {
 height: 100%;

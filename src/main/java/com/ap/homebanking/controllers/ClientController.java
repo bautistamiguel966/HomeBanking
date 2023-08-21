@@ -4,6 +4,7 @@ import com.ap.homebanking.dtos.AccountDTO;
 import com.ap.homebanking.dtos.ClientDTO;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
+import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Book;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
+import java.util.Random;
 
 import static java.util.stream.Collectors.toList;
 
@@ -25,6 +26,8 @@ public class ClientController {
     private ClientRepository clientRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AccountRepository accountRepository;
 
 
     @RequestMapping("/clients")
@@ -42,7 +45,22 @@ public class ClientController {
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         }
 
-        clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
+        Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
+        System.out.println("Nombre del cliente: " + client.getFirstName());
+        int minDigits = 5;
+        int maxDigits = 8;
+
+        Random random = new Random();
+
+        // Generar un número aleatorio entre 10000 y 99999999
+        int randomNumber = random.nextInt((int)Math.pow(10, maxDigits) - (int)Math.pow(10, minDigits)) + (int)Math.pow(10, minDigits);
+        String accountNumber = "VIN" + randomNumber;
+        Account account = new Account(accountNumber, LocalDate.now(), 0);
+
+        accountRepository.save(account);
+        client.addAccount(account);
+        clientRepository.save(client);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

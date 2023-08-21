@@ -13,9 +13,9 @@ public class ClientDTO {
     private String firstName;
     private String lastName;
     private String email;
-    Set<AccountDTO> accounts;
-    Set<ClientLoanDTO> loans;
-    Set<CardDTO> cards;
+    private Set<AccountDTO> accounts;
+    private Set<ClientLoanDTO> loans;
+    private Set<CardDTO> cards;
 
     public ClientDTO(Client client) {
         this.id = client.getId();

@@ -21,9 +21,12 @@ class WebAuthorization{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/rest/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts").hasAuthority("CLIENT") //Para crear cuenta, debe ser cliente
+//                .antMatchers(HttpMethod.GET, "/api/clients/current").hasAuthority("CLIENT")
+                .antMatchers("/api/clients/current/**").hasAuthority("CLIENT")
                 .antMatchers(HttpMethod.GET, "/api/clients").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
+                .antMatchers("/rest/**").hasAuthority("ADMIN")
                 .antMatchers("/web/accounts**").hasAuthority("CLIENT")
                 .antMatchers("/**").permitAll();
 

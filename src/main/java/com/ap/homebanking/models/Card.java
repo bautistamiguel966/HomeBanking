@@ -13,8 +13,8 @@ public class Card {
     private long id;
     private String cardHolder;
     private CardType type;
-    private ColorType color;
-    private long number;
+    private CardColor color;
+    private String number;
     private long cvv;
     private LocalDate fromDate;
     private LocalDate thruDate;
@@ -24,7 +24,7 @@ public class Card {
 
     public Card(){}
 
-    public Card(CardType type, ColorType color, long number, long cvv, LocalDate fromDate, LocalDate thruDate){
+    public Card(CardType type, CardColor color, String number, long cvv, LocalDate fromDate, LocalDate thruDate){
         //this.cardHolder = cardHolder;
         this.type = type;
         this.color = color;
@@ -54,19 +54,19 @@ public class Card {
         this.type = type;
     }
 
-    public ColorType getColor() {
+    public CardColor getColor() {
         return color;
     }
 
-    public void setColor(ColorType color) {
+    public void setColor(CardColor color) {
         this.color = color;
     }
 
-    public long getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

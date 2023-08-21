@@ -24,7 +24,6 @@ public class HomebankingApplication {
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository) {
 		return (args) -> {
 
-
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com", passwordEncoder.encode("1234"));
 			Client client2 = new Client("Rocio", "Diaz", "rocio@mindhub.com", passwordEncoder.encode("4321"));
 			Client client3 = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin"));
@@ -57,10 +56,10 @@ public class HomebankingApplication {
 			ClientLoan clientLoan4 = new ClientLoan(200000, 36);
 
 			//Tarjetas para Melba
-			Card card1 = new Card(CardType.DEBIT, ColorType.GOLD, 123123123, 123, LocalDate.now(), LocalDate.now().plusYears(5));
-			Card card2 = new Card(CardType.CREDIT, ColorType.TITANIUM, 123123155, 456, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card1 = new Card(CardType.DEBIT, CardColor.GOLD, "1231-2312-1233-6542", 123, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card2 = new Card(CardType.CREDIT, CardColor.TITANIUM, "1231-2315-1235-7654", 456, LocalDate.now(), LocalDate.now().plusYears(5));
 			//Tarjeta para Rocio
-			Card card3 = new Card(CardType.CREDIT, ColorType.SILVER, 443123155, 789, LocalDate.now(), LocalDate.now().plusYears(5));
+			Card card3 = new Card(CardType.CREDIT, CardColor.SILVER, "4431-2315-1235-5386", 789, LocalDate.now(), LocalDate.now().plusYears(5));
 
 			//Se le asignan las tarjetas a Melba
 			client1.addCard(card1);
