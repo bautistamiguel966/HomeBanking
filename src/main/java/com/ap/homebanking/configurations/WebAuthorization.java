@@ -21,15 +21,18 @@ class WebAuthorization{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-//                .antMatchers(HttpMethod.POST, "/api/clients/current/accounts").hasAuthority("CLIENT") //Para crear cuenta, debe ser cliente
-//                .antMatchers(HttpMethod.GET, "/api/clients/current").hasAuthority("CLIENT")
-                .antMatchers("/api/clients/current/**").hasAuthority("CLIENT")
-                .antMatchers("/api/transactions/**").hasAuthority("CLIENT")
-                .antMatchers(HttpMethod.GET, "/api/clients").hasAuthority("ADMIN")
+                .antMatchers("/web/index.html").permitAll()
+                .antMatchers("/web/js/index.js").permitAll()
+                .antMatchers("/web/css/style.css").permitAll()
+                .antMatchers("/web/img/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/logout").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
+                .antMatchers("/web/**").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.GET, "/api/clients").hasAuthority("ADMIN")
                 .antMatchers("/rest/**").hasAuthority("ADMIN")
-                .antMatchers("/web/accounts**").hasAuthority("CLIENT")
-                .antMatchers("/**").permitAll();
+                .antMatchers("/api/**").hasAuthority("CLIENT")
+                .anyRequest().denyAll();
 
         http.formLogin()
                 .usernameParameter("email")

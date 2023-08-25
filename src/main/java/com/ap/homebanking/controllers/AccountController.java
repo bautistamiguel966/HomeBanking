@@ -53,14 +53,18 @@ public class AccountController {
         if(client.getAccounts().size() >= 3){
             return new ResponseEntity<>("You already have 3 accounts", HttpStatus.FORBIDDEN);
         }
-        int minDigits = 5;
-        int maxDigits = 8;
+        String accountNumber;
+        do {
+            int minDigits = 5;
+            int maxDigits = 8;
 
-        Random random = new Random();
+            Random random = new Random();
 
-        // Generar un número aleatorio entre 10000 y 99999999
-        int randomNumber = random.nextInt((int)Math.pow(10, maxDigits) - (int)Math.pow(10, minDigits)) + (int)Math.pow(10, minDigits);
-        String accountNumber = "VIN" + randomNumber;
+            // Generar un número aleatorio entre 10000 y 99999999
+            int randomNumber = random.nextInt((int)Math.pow(10, maxDigits) - (int)Math.pow(10, minDigits)) + (int)Math.pow(10, minDigits);
+            accountNumber = "VIN" + randomNumber;
+        }while (accountRepository.findByNumber(accountNumber) != null);
+
         Account account = new Account(accountNumber, LocalDate.now(), 0);
         //System.out.println("ID: " + account.getId() + " NUMERO: " + account.getNumber());
         client.addAccount(account);
