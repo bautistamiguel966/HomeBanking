@@ -253,7 +253,30 @@ h2{
     justify-content: space-around;
     margin: 2.9%;
 }
+ /* PARA LOAN APPLY */
 
+#row-loanApply{
+    display: flex;
+    justify-content: space-around;
+    margin: 2.2%;
+}
+
+/* #row-loanApply form{
+    display: flex;
+    flex-direction: column;
+    
+} */
+#row-loanApply form div{
+    margin-top: 5%;
+}
+#col-img-loan{
+    width:30%;
+    height:500px;
+    background-image: url('/web/img/Loan.jpg');
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
 
 @media (max-width: 450px) {
 .h-custom {
