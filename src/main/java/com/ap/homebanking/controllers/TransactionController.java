@@ -7,6 +7,9 @@ import com.ap.homebanking.models.TransactionType;
 import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
 import com.ap.homebanking.repositories.TransactionRepository;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
+import com.ap.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +26,11 @@ import java.time.LocalDate;
 @RequestMapping("/api")
 public class TransactionController {
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
 
     @Transactional
@@ -38,9 +41,9 @@ public class TransactionController {
                                                     @RequestParam double amount,
                                                     @RequestParam String description){
 
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account accountFrom = accountRepository.findByNumber(fromAccountNumber);
-        Account accountTo = accountRepository.findByNumber(toAccountNumber);
+        Client client = clientService.findByEmail(authentication.getName());
+        Account accountFrom = accountService.findByNumber(fromAccountNumber);
+        Account accountTo = accountService.findByNumber(toAccountNumber);
 
         if (amount == 0 || description.isEmpty() || fromAccountNumber.isEmpty() || toAccountNumber.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
@@ -77,11 +80,11 @@ public class TransactionController {
         accountFrom.setBalance(accountFrom.getBalance() - amount);
         accountTo.setBalance(accountTo.getBalance() + amount);
 
-        transactionRepository.save(transactionFrom);
-        transactionRepository.save(transactionTo);
+        transactionService.save(transactionFrom);
+        transactionService.save(transactionTo);
 
-        accountRepository.save(accountFrom);
-        accountRepository.save(accountTo);
+        accountService.save(accountFrom);
+        accountService.save(accountTo);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

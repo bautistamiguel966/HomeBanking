@@ -1,10 +1,9 @@
 package com.ap.homebanking.controllers;
 
-import com.ap.homebanking.dtos.AccountDTO;
 import com.ap.homebanking.dtos.CardDTO;
 import com.ap.homebanking.models.*;
-import com.ap.homebanking.repositories.CardRepository;
-import com.ap.homebanking.repositories.ClientRepository;
+import com.ap.homebanking.services.ClientService;
+import com.ap.homebanking.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,32 +22,23 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class CardController {
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
     @Autowired
-    private CardRepository cardRepository;
+    private CardService cardService;
 
 
     @RequestMapping(path = "/clients/current/cards", method = RequestMethod.GET)
     public ResponseEntity<Set<CardDTO>> getCards(Authentication authentication){
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         return ResponseEntity.ok(client.getCards().stream().map(card -> new CardDTO(card)).collect(Collectors.toSet()));
     }
     @RequestMapping(path = "/clients/current/cards", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication, @RequestParam CardColor cardColor, @RequestParam CardType cardType) {
 
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
 
-        //System.out.println("Nombre del cliente: " + client.getFirstName());
-
-        int typeCard = 0;
-        Set<Card> cards = client.getCards();
-        for(Card card : cards){
-            if(card.getType() == cardType){
-                typeCard ++;
-            }
-        }
-        if(typeCard >= 3){
-            return new ResponseEntity<>("You already have 3 " +cardType + " cards", HttpStatus.FORBIDDEN);
+        if(cardService.exist(cardType, cardColor, client)){
+            return new ResponseEntity<>("You already have a " +cardColor + " " +cardType + " card", HttpStatus.FORBIDDEN);
         }
 
         Random random = new Random();
@@ -64,11 +54,10 @@ public class CardController {
                 cardNumber = cardNumber + randomNumber4Digits + "-";
             }
         }
-        //System.out.println("ID: " + account.getId() + " NUMERO: " + account.getNumber());
         Card card = new Card(cardType, cardColor, cardNumber, randomNumber3Digits, LocalDate.now(), LocalDate.now().plusYears(5));
         client.addCard(card);
-        cardRepository.save(card);
-        clientRepository.save(client);
+        cardService.save(card);
+        clientService.save(client);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

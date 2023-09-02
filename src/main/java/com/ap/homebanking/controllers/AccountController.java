@@ -1,11 +1,10 @@
 package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.AccountDTO;
-import com.ap.homebanking.dtos.ClientDTO;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
-import com.ap.homebanking.repositories.AccountRepository;
-import com.ap.homebanking.repositories.ClientRepository;
+import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,36 +17,50 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api")
 public class AccountController {
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
-    @RequestMapping("/accounts")
+    @RequestMapping(path = "/accounts", method = RequestMethod.GET)
     public List<AccountDTO> getAccounts(){
-        //return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(toList());
-        return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(toList());
+        return accountService.getAccountsDTO();
     }
 
-    @RequestMapping("/accounts/{id}")
+    @RequestMapping(path = "/accounts/admin/{id}", method = RequestMethod.GET)
     public AccountDTO getAccount(@PathVariable long id){
-        return accountRepository.findById(id).map(account -> new AccountDTO(account)).orElse(null);
+        return accountService.getAccountDTO(id);
+    }
+    @RequestMapping("/accounts/{id}")
+    public ResponseEntity<Object> getAccount(Authentication authentication, @PathVariable long id){
+        Client client = clientService.findByEmail(authentication.getName());
+        //Valido que el id de la cuenta pertenezca al cliente autenticado.
+        boolean flag = false;
+        for(Account account : client.getAccounts()){
+            if(account.getId() == id){
+                flag = true;
+            }
+        }
+        if(flag == true){
+            return new ResponseEntity<>(accountService.getAccountDTO(id), HttpStatus.ACCEPTED);
+        }else{
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
     }
 
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.GET)
     public ResponseEntity<Set<AccountDTO>> getAccounts(Authentication authentication){
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         return ResponseEntity.ok(client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(Collectors.toSet()));
     }
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
 
         //System.out.println("Nombre del cliente: " + client.getFirstName());
         if(client.getAccounts().size() >= 3){
@@ -63,13 +76,13 @@ public class AccountController {
             // Generar un número aleatorio entre 10000 y 99999999
             int randomNumber = random.nextInt((int)Math.pow(10, maxDigits) - (int)Math.pow(10, minDigits)) + (int)Math.pow(10, minDigits);
             accountNumber = "VIN" + randomNumber;
-        }while (accountRepository.findByNumber(accountNumber) != null);
+        }while (accountService.findByNumber(accountNumber) != null);
 
         Account account = new Account(accountNumber, LocalDate.now(), 0);
         //System.out.println("ID: " + account.getId() + " NUMERO: " + account.getNumber());
         client.addAccount(account);
-        accountRepository.save(account);
-        clientRepository.save(client);
+        accountService.save(account);
+        clientService.save(client);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

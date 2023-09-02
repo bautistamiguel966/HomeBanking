@@ -3,7 +3,7 @@ package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.LoanApplicationDTO;
 import com.ap.homebanking.dtos.LoanDTO;
 import com.ap.homebanking.models.*;
-import com.ap.homebanking.repositories.*;
+import com.ap.homebanking.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,32 +16,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class LoanController {
     @Autowired
-    private LoanRepository loanRepository;
+    private LoanService loanService;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
     @Autowired
-    ClientLoanRepository clientLoanRepository;
+    private ClientLoanService clientLoanService;
     @Autowired
-    TransactionRepository transactionRepository;
+    private TransactionService transactionService;
 
     @RequestMapping(path = "/loans", method = RequestMethod.GET)
     public ResponseEntity<List<LoanDTO>> getLoans(){
-        return ResponseEntity.ok(loanRepository.findAll().stream().map(loan -> new LoanDTO(loan)).collect(Collectors.toList()));
+        return ResponseEntity.ok(loanService.getLoansDTO());
     }
     @Transactional
     @RequestMapping(path = "/loans", method = RequestMethod.POST)
     public ResponseEntity<Object> applyForLoan(Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO){
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId());
-        Account account = accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber());
+        Client client = clientService.findByEmail(authentication.getName());
+        Loan loan = loanService.findById(loanApplicationDTO.getLoanId());
+        Account account = accountService.findByNumber(loanApplicationDTO.getToAccountNumber());
 
         if(loanApplicationDTO.getLoanId() == 0 || loanApplicationDTO.getAmount() == 0 || loanApplicationDTO.getPayments() == 0 || loanApplicationDTO.getToAccountNumber().isEmpty()){
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
@@ -62,9 +61,6 @@ public class LoanController {
         if(flag == false){
             return new ResponseEntity<>("The account does not belong to the authenticated client", HttpStatus.FORBIDDEN);
         }
-//        if(client.getAccounts().contains(account.getNumber()) == false){
-//            return new ResponseEntity<>("The account does not belong to the authenticated client", HttpStatus.FORBIDDEN);
-//        }
         if(loanApplicationDTO.getAmount() > loan.getMaxAmount()){
             return new ResponseEntity<>("The amount exceeded what was allowed", HttpStatus.FORBIDDEN);
         }
@@ -79,11 +75,11 @@ public class LoanController {
         account.addTransactions(transaction);
         account.setBalance(account.getBalance() + loanApplicationDTO.getAmount());
 
-        transactionRepository.save(transaction);
-        clientLoanRepository.save(clientLoan);
-        loanRepository.save(loan);
-        accountRepository.save(account);
-        clientRepository.save(client);
+        transactionService.save(transaction);
+        clientLoanService.save(clientLoan);
+        loanService.save(loan);
+        accountService.save(account);
+        clientService.save(client);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
