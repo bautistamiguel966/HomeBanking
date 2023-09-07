@@ -44,15 +44,33 @@ public class TransactionController {
         Client client = clientService.findByEmail(authentication.getName());
         Account accountFrom = accountService.findByNumber(fromAccountNumber);
         Account accountTo = accountService.findByNumber(toAccountNumber);
+        //Quito todos los espacios en blanco en los numeros de cuenta
+        String cleanedFromAccountNumber = fromAccountNumber.replace(" ", "");
+        String cleanedToAccountNumber = toAccountNumber.replace(" ", "");
 
-        if (amount == 0 || description.isEmpty() || fromAccountNumber.isEmpty() || toAccountNumber.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        if(description.trim().isEmpty()){
+            return new ResponseEntity<>("Description cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        if(cleanedFromAccountNumber.isEmpty()){
+            return new ResponseEntity<>("Origin account cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        if(cleanedToAccountNumber.isEmpty()){
+            return new ResponseEntity<>("Destination account cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        if(amount == 0){
+            return new ResponseEntity<>("Amount cannot be 0", HttpStatus.FORBIDDEN);
+        }
+        if(amount < 0){
+            return new ResponseEntity<>("Amount cannot be negative", HttpStatus.FORBIDDEN);
         }
         if(fromAccountNumber.equals(toAccountNumber)){
             return new ResponseEntity<>("Both accounts cannot be the same", HttpStatus.FORBIDDEN);
         }
         if(accountFrom == null){
             return new ResponseEntity<>("Origin account doesn´t exists", HttpStatus.FORBIDDEN);
+        }
+        if(accountTo == null){
+            return new ResponseEntity<>("Destination account doesn´t exists", HttpStatus.FORBIDDEN);
         }
         //Creo una bandera para ver si la cuenta de origen pertenece al cliente autenticado
         boolean flag = false;
@@ -63,9 +81,6 @@ public class TransactionController {
         }
         if(flag == false){
             return new ResponseEntity<>("The account does not belong to the authenticated client", HttpStatus.FORBIDDEN);
-        }
-        if(accountTo == null){
-            return new ResponseEntity<>("Account doesn´t exists", HttpStatus.FORBIDDEN);
         }
         if(accountFrom.getBalance() < amount){
             return new ResponseEntity<>("You don't have enough balance", HttpStatus.FORBIDDEN);

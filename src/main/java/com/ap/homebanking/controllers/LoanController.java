@@ -42,9 +42,24 @@ public class LoanController {
         Loan loan = loanService.findById(loanApplicationDTO.getLoanId());
         Account account = accountService.findByNumber(loanApplicationDTO.getToAccountNumber());
 
-        if(loanApplicationDTO.getLoanId() == 0 || loanApplicationDTO.getAmount() == 0 || loanApplicationDTO.getPayments() == 0 || loanApplicationDTO.getToAccountNumber().isEmpty()){
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        //Quito todos los espacios en blanco del nombre de la cuenta
+        String cleanedToAccountNumber = loanApplicationDTO.getToAccountNumber().replace(" ", "");
+        if(loanApplicationDTO.getLoanId() == 0){
+            return new ResponseEntity<>("Missing Loan ID", HttpStatus.FORBIDDEN);
         }
+        if(loanApplicationDTO.getAmount() == 0){
+            return new ResponseEntity<>("Amount cannot be 0", HttpStatus.FORBIDDEN);
+        }
+        if(loanApplicationDTO.getAmount() < 0){
+            return new ResponseEntity<>("Amount cannot be nevative", HttpStatus.FORBIDDEN);
+        }
+        if(loanApplicationDTO.getPayments() == 0){
+            return new ResponseEntity<>("Missing payments", HttpStatus.FORBIDDEN);
+        }
+        if(cleanedToAccountNumber.isEmpty()){
+            return new ResponseEntity<>("Account number cannot be empty", HttpStatus.FORBIDDEN);
+        }
+
         if(account == null){
             return new ResponseEntity<>("The Account doesn´t exist", HttpStatus.FORBIDDEN);
         }
