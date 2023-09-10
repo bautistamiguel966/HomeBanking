@@ -3,8 +3,10 @@ package com.ap.homebanking.controllers;
 import com.ap.homebanking.dtos.AccountDTO;
 import com.ap.homebanking.models.Account;
 import com.ap.homebanking.models.Client;
+import com.ap.homebanking.models.Transaction;
 import com.ap.homebanking.services.AccountService;
 import com.ap.homebanking.services.ClientService;
+import com.ap.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +27,22 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private TransactionService transactionService;
 
-    @RequestMapping(path = "/accounts", method = RequestMethod.GET)
+//    @RequestMapping(path = "/accounts", method = RequestMethod.GET)
+    @GetMapping("/accounts")
     public List<AccountDTO> getAccounts(){
         return accountService.getAccountsDTO();
     }
 
-    @RequestMapping(path = "/accounts/admin/{id}", method = RequestMethod.GET)
+//    @RequestMapping(path = "/accounts/admin/{id}", method = RequestMethod.GET)
+    @GetMapping("/accounts/admin/{id}")
     public AccountDTO getAccount(@PathVariable long id){
         return accountService.getAccountDTO(id);
     }
-    @RequestMapping("/accounts/{id}")
+//    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccount(Authentication authentication, @PathVariable long id){
         Client client = clientService.findByEmail(authentication.getName());
         //Valido que el id de la cuenta pertenezca al cliente autenticado.
@@ -52,12 +59,14 @@ public class AccountController {
         }
     }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.GET)
+//    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.GET)
+    @GetMapping("/clients/current/accounts")
     public ResponseEntity<Set<AccountDTO>> getAccounts(Authentication authentication){
         Client client = clientService.findByEmail(authentication.getName());
         return ResponseEntity.ok(client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(Collectors.toSet()));
     }
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+//    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    @PostMapping("/clients/current/accounts")
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 
         Client client = clientService.findByEmail(authentication.getName());
@@ -84,5 +93,22 @@ public class AccountController {
         accountService.save(account);
         clientService.save(client);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/clients/current/accounts/{id}")
+    public ResponseEntity<Object> deleteAccount(Authentication authentication, @PathVariable long id){
+        Client client = clientService.findByEmail(authentication.getName());
+        Account account = accountService.findById(id);
+
+        if(client.getAccounts().contains(account)){
+            if(account.getTransactions() != null){
+                for(Transaction transaction : account.getTransactions()){
+                    transactionService.delete(transaction.getId());
+                }
+                accountService.delete(id);
+            }
+            return ResponseEntity.noContent().build();
+        }
+        return new ResponseEntity<>("The account doesn´t belong to this client ",HttpStatus.FORBIDDEN);
     }
 }

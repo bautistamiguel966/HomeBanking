@@ -18,6 +18,7 @@ public class Transaction {
     private double amount;
     private String description;
     private LocalDate date;
+    private double amountAccount;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="account_id")
@@ -66,6 +67,13 @@ public class Transaction {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public double getAmountAccount() {
+        return amountAccount;
+    }
+    public void setAmountAccount(double amountAccount) {
+        this.amountAccount = amountAccount;
     }
 
     @JsonIgnore

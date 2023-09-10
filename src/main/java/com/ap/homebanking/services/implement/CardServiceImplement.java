@@ -25,4 +25,9 @@ public class CardServiceImplement implements CardService {
     public boolean exist(CardType type, CardColor color, Client client) {
         return cardRepository.existsByTypeAndColorAndClient(type, color, client);
     }
+
+    @Override
+    public void delete(long cardId) {
+        cardRepository.deleteById(cardId);
+    }
 }

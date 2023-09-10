@@ -13,4 +13,6 @@ public interface CardService {
     void save(Card card);
 
     boolean exist(CardType type, CardColor color, Client client);
+
+    void delete(long cardId);
 }

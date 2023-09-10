@@ -6,6 +6,7 @@ Vue.createApp({
             debitCards: [],
             errorToats: null,
             errorMsg: null,
+            cardToDeleteId: null,
         }
     },
     methods: {
@@ -25,6 +26,11 @@ Vue.createApp({
         formatDate: function (date) {
             return new Date(date).toLocaleDateString('en-gb');
         },
+        isDateExpired: function (date) {
+            const currentDate = new Date();
+            const cardThruDate = new Date(date);
+            return cardThruDate < currentDate;
+        },
         signOut: function () {
             axios.post('/api/logout')
                 .then(response => window.location.href = "/web/index.html")
@@ -33,9 +39,29 @@ Vue.createApp({
                     this.errorToats.show();
                 })
         },
+        deleteCard: function (cardId) {
+            this.cardToDeleteId = cardId;
+            this.modal.show();
+        },        
+        confirmDelete: function (cardId) {
+            console.log("Confirm Delete - Card ID: ", cardId);
+    
+            axios.delete(`/api/clients/current/cards/${cardId}`)
+                .then(response => {
+                    console.log("Card deleted successfully.");
+                    this.modal.hide();
+                    window.location.href = "/web/cards.html";
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.errorMsg = error.response.data;
+                    this.errorToats.show();
+                });
+        }        
     },
     mounted: function () {
         this.errorToats = new bootstrap.Toast(document.getElementById('danger-toast'));
+        this.modal = new bootstrap.Modal(document.getElementById('confirModal'));
         this.getData();
     }
 }).mount('#app')

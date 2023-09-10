@@ -15,10 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -34,7 +31,8 @@ public class TransactionController {
 
 
     @Transactional
-    @RequestMapping(path = "/transactions", method = RequestMethod.POST)
+//    @RequestMapping(path = "/transactions", method = RequestMethod.POST)
+    @PostMapping("/transactions")
     public ResponseEntity<Object> createTransaction(Authentication authentication,
                                                     @RequestParam String fromAccountNumber,
                                                     @RequestParam String toAccountNumber,
@@ -88,6 +86,10 @@ public class TransactionController {
 
         Transaction transactionFrom = new Transaction(TransactionType.DEBIT, -amount, description + fromAccountNumber, LocalDate.now());
         Transaction transactionTo = new Transaction(TransactionType.CREDIT, amount, description + toAccountNumber, LocalDate.now());
+
+        //Le seteo al campo amountAccount de cada transaction, el balance de su cuenta - y +  el monto de la transaction respectivamente
+        transactionFrom.setAmountAccount(accountFrom.getBalance() - amount);
+        transactionTo.setAmountAccount(accountTo.getBalance() + amount);
 
         accountFrom.addTransactions(transactionFrom);
         accountTo.addTransactions(transactionTo);

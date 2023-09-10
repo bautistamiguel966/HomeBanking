@@ -278,6 +278,22 @@ h2{
     background-repeat:no-repeat;
 }
 
+#btn-delete{
+    margin-left: 2%;
+    justify-content: center;
+    width: 10%;
+    border-radius: 10%;
+}
+#btn-delete-account{
+    justify-content: center;
+    width: 15%;
+    border-radius: 10%;
+}
+
+#expired{
+    color: red;
+}
+
 @media (max-width: 450px) {
 .h-custom {
 height: 100%;

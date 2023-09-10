@@ -4,4 +4,6 @@ import com.ap.homebanking.models.Transaction;
 
 public interface TransactionService {
     void save(Transaction transaction);
+
+    void delete(long id);
 }

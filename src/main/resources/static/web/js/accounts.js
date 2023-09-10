@@ -4,6 +4,7 @@ Vue.createApp({
             clientInfo: {},
             errorToats: null,
             errorMsg: null,
+            accountToDeleteId: null,
         }
     },
     methods: {
@@ -37,10 +38,30 @@ Vue.createApp({
                     this.errorMsg = error.response.data;
                     this.errorToats.show();
                 })
+        },
+        deleteAccount: function (accountId) {
+            this.accountToDeleteId = accountId;
+            this.modal.show();
+        },        
+        confirmDelete: function (accountId) {
+            console.log("Confirm Delete - Account ID: ", accountId);
+    
+            axios.delete(`/api/clients/current/accounts/${accountId}`)
+                .then(response => {
+                    console.log("Account deleted successfully.");
+                    this.modal.hide();
+                    window.location.href = "/web/accounts.html";
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.errorMsg = error.response.data;
+                    this.errorToats.show();
+                });
         }
     },
     mounted: function () {
         this.errorToats = new bootstrap.Toast(document.getElementById('danger-toast'));
+        this.modal = new bootstrap.Modal(document.getElementById('confirModal'));
         this.getData();
     }
 }).mount('#app')

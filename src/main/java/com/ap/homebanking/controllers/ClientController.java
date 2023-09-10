@@ -28,12 +28,14 @@ public class ClientController {
     private AccountService accountService;
 
 
-    @RequestMapping("/clients")
+//    @RequestMapping("/clients")
+    @GetMapping("/clients")
     public List<ClientDTO> getClients(){
         return clientService.getClientsDTO();
     }
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+//    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @PostMapping("/clients")
     public ResponseEntity<Object> register(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password) {
 
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
@@ -62,15 +64,15 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping("/clients/{id}")
+//    @RequestMapping("/clients/{id}")
+    @GetMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable long id){
         return clientService.getClientDTO(id);
     }
 
-    @RequestMapping("/clients/current")
+//    @RequestMapping("/clients/current")
+    @GetMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication) {
-
         return clientService.getCurrent(authentication.getName());
-
     }
 }

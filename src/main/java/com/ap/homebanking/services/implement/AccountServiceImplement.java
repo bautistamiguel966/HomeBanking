@@ -40,4 +40,9 @@ public class AccountServiceImplement implements AccountService {
     public Account findByNumber(String accountNumber) {
         return accountRepository.findByNumber(accountNumber);
     }
+
+    @Override
+    public void delete(long id) {
+        accountRepository.deleteById(id);
+    }
 }

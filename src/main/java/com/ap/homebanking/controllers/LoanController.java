@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,12 +28,14 @@ public class LoanController {
     @Autowired
     private TransactionService transactionService;
 
-    @RequestMapping(path = "/loans", method = RequestMethod.GET)
+//    @RequestMapping(path = "/loans", method = RequestMethod.GET)
+    @GetMapping("/loans")
     public ResponseEntity<List<LoanDTO>> getLoans(){
         return ResponseEntity.ok(loanService.getLoansDTO());
     }
     @Transactional
-    @RequestMapping(path = "/loans", method = RequestMethod.POST)
+//    @RequestMapping(path = "/loans", method = RequestMethod.POST)
+    @PostMapping("/loans")
     public ResponseEntity<Object> applyForLoan(Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO){
         Client client = clientService.findByEmail(authentication.getName());
         Loan loan = loanService.findById(loanApplicationDTO.getLoanId());

@@ -93,6 +93,7 @@
                                 <th>Type</th>
                                 <th>Amount</th>
                                 <th>Date</th>
+                                <th>Balance Account</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -102,6 +103,7 @@
                                 <td>{{ transaction.type }}</td>
                                 <td>{{ transaction.amount }}</td>
                                 <td>{{ formatDate(transaction.date) }}</td>
+                                <td>{{transaction.amountAccount}}</td>
                                 <td>{{ transaction.description }}</td>
                             </tr>
                         </tbody>
