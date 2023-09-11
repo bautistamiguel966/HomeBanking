@@ -28,7 +28,7 @@ public class CardController {
     @GetMapping("/clients/current/cards")
     public ResponseEntity<Set<CardDTO>> getCards(Authentication authentication){
         Client client = clientService.findByEmail(authentication.getName());
-        return ResponseEntity.ok(client.getCards().stream().map(card -> new CardDTO(card)).collect(Collectors.toSet()));
+        return ResponseEntity.ok(client.getCards().stream().filter(card -> card.isActive()).map(card -> new CardDTO(card)).collect(Collectors.toSet()));
     }
     @PostMapping("/clients/current/cards")
     public ResponseEntity<Object> createAccount(Authentication authentication, @RequestParam CardColor cardColor, @RequestParam CardType cardType) {
@@ -52,8 +52,10 @@ public class CardController {
         Client client = clientService.findByEmail(authentication.getName());
         for(Card card : client.getCards()){
             if(card.getId() == id){
+                Card card1 = cardService.findById(id);
+                card1.setActive(false);
                 System.out.println("ID DE CARD ELIMINADA: " + id);
-                cardService.delete(id);
+                cardService.save(card1);
                 return ResponseEntity.noContent().build();
             }
         }

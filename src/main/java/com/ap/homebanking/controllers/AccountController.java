@@ -64,7 +64,7 @@ public class AccountController {
     @GetMapping("/clients/current/accounts")
     public ResponseEntity<Set<AccountDTO>> getAccounts(Authentication authentication){
         Client client = clientService.findByEmail(authentication.getName());
-        return ResponseEntity.ok(client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(Collectors.toSet()));
+        return ResponseEntity.ok(client.getAccounts().stream().filter(account -> account.isActive()).map(account -> new AccountDTO(account)).collect(Collectors.toSet()));
     }
 //    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     @PostMapping("/clients/current/accounts")
@@ -81,7 +81,9 @@ public class AccountController {
             return new ResponseEntity<>("The account type doesn´t exist", HttpStatus.FORBIDDEN);
         }
 
-        if(client.getAccounts().size() >= 3){
+        long activeAccounts = client.getAccounts().stream().filter(Account::isActive).count();
+
+        if(activeAccounts >= 3){
             return new ResponseEntity<>("You already have 3 accounts", HttpStatus.FORBIDDEN);
         }
         String accountNumber;
@@ -108,12 +110,18 @@ public class AccountController {
         Client client = clientService.findByEmail(authentication.getName());
         Account account = accountService.findById(id);
 
+        if(account.getBalance() > 0){
+            return new ResponseEntity<>("The account has a balance, if you want to delete it, transfer the remaining balance. ",HttpStatus.FORBIDDEN);
+        }
+
         if(client.getAccounts().contains(account)){
             if(account.getTransactions() != null){
                 for(Transaction transaction : account.getTransactions()){
-                    transactionService.delete(transaction.getId());
+                    transaction.setActive(false);
+                    transactionService.save(transaction);
                 }
-                accountService.delete(id);
+                account.setActive(false);
+                accountService.save(account);
             }
             return ResponseEntity.noContent().build();
         }

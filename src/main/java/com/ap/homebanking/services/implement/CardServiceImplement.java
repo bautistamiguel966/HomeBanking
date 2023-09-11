@@ -23,12 +23,7 @@ public class CardServiceImplement implements CardService {
 
     @Override
     public boolean exist(CardType type, CardColor color, Client client) {
-        return cardRepository.existsByTypeAndColorAndClient(type, color, client);
-    }
-
-    @Override
-    public void delete(long cardId) {
-        cardRepository.deleteById(cardId);
+        return cardRepository.existsByTypeAndColorAndActiveTrueAndClient(type, color, client);
     }
 
     @Override
@@ -42,5 +37,10 @@ public class CardServiceImplement implements CardService {
     @Override
     public Card findByNumber(String number) {
         return cardRepository.findByNumber(number);
+    }
+
+    @Override
+    public Card findById(long id) {
+        return cardRepository.findById(id).orElse(null);
     }
 }

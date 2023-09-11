@@ -28,6 +28,7 @@ class WebAuthorization{
                 .antMatchers(HttpMethod.POST, "/api/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/logout").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/payments").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/web/**").hasAuthority("CLIENT")
                 .antMatchers(HttpMethod.POST, "/api/loans/create").hasAuthority("ADMIN")
@@ -45,7 +46,6 @@ class WebAuthorization{
 
         http.logout()
                 .logoutUrl("/api/logout");
-
 
         // turn off checking for CSRF tokens
         http.csrf().disable();

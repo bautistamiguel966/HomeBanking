@@ -334,10 +334,6 @@ form .row.mb-3 {
     justify-content: space-around;
     align-items: center;
 }
-
-.toast-container{
-    z-index: 9999;
-}
 @media (max-width: 450px) {
 .h-custom {
 height: 100%;

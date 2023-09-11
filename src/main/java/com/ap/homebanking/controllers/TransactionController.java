@@ -1,5 +1,6 @@
 package com.ap.homebanking.controllers;
 
+import com.ap.homebanking.dtos.PaymentDTO;
 import com.ap.homebanking.models.*;
 import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
@@ -106,27 +107,25 @@ public class TransactionController {
     //Pagar con una tarjeta
     @Transactional
     @PostMapping("/payments")
-    public ResponseEntity<Object> createPayment(Authentication authentication,
-                                                @RequestParam String number,
-                                                @RequestParam int cvv,
-                                                @RequestParam double amount,
-                                                @RequestParam String description){
+    public ResponseEntity<Object> createPayment(@RequestBody PaymentDTO paymentDTO){
 
-        Client client = clientService.findByEmail(authentication.getName());
-        Card card = cardService.findByNumber(number);
-        if(!cardService.existByNumberAndClient(number, client)){
-            return new ResponseEntity<>("The card does not belong to the authenticated client", HttpStatus.FORBIDDEN);
-        }
+        Card card = cardService.findByNumber(paymentDTO.getNumber());
+        Client client = card.getClient();
+        double amount = paymentDTO.getAmount();
+
         if(card.getThruDate().isBefore(LocalDate.now())){
             return new ResponseEntity<>("The card expired", HttpStatus.FORBIDDEN);
         }
-        if(card.getCvv() != cvv){
+        if(card.getCvv() != paymentDTO.getCvv()){
             return new ResponseEntity<>("The cvv is incorrect", HttpStatus.FORBIDDEN);
+        }
+        if(!card.isActive()){
+            return new ResponseEntity<>("The card was deactivated", HttpStatus.FORBIDDEN);
         }
         boolean paymentSuccessful = false;
         for(Account account : client.getAccounts()){
             if(account.getBalance() >= amount){
-                Transaction transaction = new Transaction(TransactionType.DEBIT, -amount, description + account.getNumber(), LocalDate.now());
+                Transaction transaction = new Transaction(TransactionType.DEBIT, -amount, paymentDTO.getDescription() + account.getNumber(), LocalDate.now());
                 transaction.setAmountAccount(account.getBalance() - amount);
                 account.addTransactions(transaction);
                 account.setBalance(account.getBalance() - amount);
