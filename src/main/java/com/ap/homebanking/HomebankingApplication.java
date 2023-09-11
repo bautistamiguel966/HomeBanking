@@ -28,10 +28,10 @@ public class HomebankingApplication {
 //			Client client2 = new Client("Rocio", "Diaz", "rocio@mindhub.com", passwordEncoder.encode("4321"));
 //			Client client3 = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin"));
 //
-//			Account account1 = new Account("VIN001", LocalDate.now(), 5000);
-//			Account account2 = new Account("VIN002", LocalDate.now().plusDays(1), 7500);
-//			Account account3 = new Account("VIN003", LocalDate.now().plusDays(3), 4000);
-//			Account account4 = new Account("VIN004", LocalDate.now().plusDays(7), 9000);
+//			Account account1 = new Account("VIN001", LocalDate.now(), 5000, AccountType.CHECKING);
+//			Account account2 = new Account("VIN002", LocalDate.now().plusDays(1), 7500, AccountType.SAVINGS);
+//			Account account3 = new Account("VIN003", LocalDate.now().plusDays(3), 4000, AccountType.CHECKING);
+//			Account account4 = new Account("VIN004", LocalDate.now().plusDays(7), 9000, AccountType.SAVINGS);
 //
 //			Transaction transaction1 = new Transaction(TransactionType.CREDIT, 10000, "Description 1", LocalDate.now());
 //			Transaction transaction2 = new Transaction(TransactionType.DEBIT, -12000, "Description 2", LocalDate.now().plusDays(13));
@@ -46,9 +46,9 @@ public class HomebankingApplication {
 //			List<Integer> payments2 = List.of(6, 12, 24);
 //			List<Integer> payments3 = List.of(6, 12, 24, 36);
 //
-//			Loan loan1 = new Loan("Hipotecario", 500000, payments1);
-//			Loan loan2 = new Loan("Personal", 100000, payments2);
-//			Loan loan3 = new Loan("Automotriz", 300000, payments3);
+//			Loan loan1 = new Loan("Hipotecario", 500000, payments1, 22.5);
+//			Loan loan2 = new Loan("Personal", 100000, payments2, 30);
+//			Loan loan3 = new Loan("Automotriz", 300000, payments3, 10);
 //
 //			ClientLoan clientLoan1 = new ClientLoan(400000, 60);
 //			ClientLoan clientLoan2 = new ClientLoan(50000, 12);

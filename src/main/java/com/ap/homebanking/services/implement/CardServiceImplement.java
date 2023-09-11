@@ -30,4 +30,17 @@ public class CardServiceImplement implements CardService {
     public void delete(long cardId) {
         cardRepository.deleteById(cardId);
     }
+
+    @Override
+    public boolean existByNumberAndClient(String number, Client client) {
+        if(cardRepository.existsByNumberAndClient(number, client)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Card findByNumber(String number) {
+        return cardRepository.findByNumber(number);
+    }
 }

@@ -2,6 +2,7 @@ package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.AccountDTO;
 import com.ap.homebanking.models.Account;
+import com.ap.homebanking.models.AccountType;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.models.Transaction;
 import com.ap.homebanking.services.AccountService;
@@ -67,11 +68,19 @@ public class AccountController {
     }
 //    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     @PostMapping("/clients/current/accounts")
-    public ResponseEntity<Object> createAccount(Authentication authentication) {
+    public ResponseEntity<Object> createAccount(Authentication authentication, @RequestParam AccountType accountType) {
 
         Client client = clientService.findByEmail(authentication.getName());
+        boolean flag = false;
+        for(AccountType type : AccountType.values()){
+            if(type.name().equals(accountType.name())){
+                flag = true;
+            }
+        }
+        if(!flag){
+            return new ResponseEntity<>("The account type doesn´t exist", HttpStatus.FORBIDDEN);
+        }
 
-        //System.out.println("Nombre del cliente: " + client.getFirstName());
         if(client.getAccounts().size() >= 3){
             return new ResponseEntity<>("You already have 3 accounts", HttpStatus.FORBIDDEN);
         }
@@ -87,8 +96,7 @@ public class AccountController {
             accountNumber = "VIN" + randomNumber;
         }while (accountService.findByNumber(accountNumber) != null);
 
-        Account account = new Account(accountNumber, LocalDate.now(), 0);
-        //System.out.println("ID: " + account.getId() + " NUMERO: " + account.getNumber());
+        Account account = new Account(accountNumber, LocalDate.now(), 0, accountType);
         client.addAccount(account);
         accountService.save(account);
         clientService.save(client);

@@ -1,13 +1,11 @@
 package com.ap.homebanking.controllers;
 
-import com.ap.homebanking.models.Account;
-import com.ap.homebanking.models.Client;
-import com.ap.homebanking.models.Transaction;
-import com.ap.homebanking.models.TransactionType;
+import com.ap.homebanking.models.*;
 import com.ap.homebanking.repositories.AccountRepository;
 import com.ap.homebanking.repositories.ClientRepository;
 import com.ap.homebanking.repositories.TransactionRepository;
 import com.ap.homebanking.services.AccountService;
+import com.ap.homebanking.services.CardService;
 import com.ap.homebanking.services.ClientService;
 import com.ap.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +26,11 @@ public class TransactionController {
     private AccountService accountService;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private CardService cardService;
 
 
     @Transactional
-//    @RequestMapping(path = "/transactions", method = RequestMethod.POST)
     @PostMapping("/transactions")
     public ResponseEntity<Object> createTransaction(Authentication authentication,
                                                     @RequestParam String fromAccountNumber,
@@ -102,6 +101,44 @@ public class TransactionController {
 
         accountService.save(accountFrom);
         accountService.save(accountTo);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    //Pagar con una tarjeta
+    @Transactional
+    @PostMapping("/payments")
+    public ResponseEntity<Object> createPayment(Authentication authentication,
+                                                @RequestParam String number,
+                                                @RequestParam int cvv,
+                                                @RequestParam double amount,
+                                                @RequestParam String description){
+
+        Client client = clientService.findByEmail(authentication.getName());
+        Card card = cardService.findByNumber(number);
+        if(!cardService.existByNumberAndClient(number, client)){
+            return new ResponseEntity<>("The card does not belong to the authenticated client", HttpStatus.FORBIDDEN);
+        }
+        if(card.getThruDate().isBefore(LocalDate.now())){
+            return new ResponseEntity<>("The card expired", HttpStatus.FORBIDDEN);
+        }
+        if(card.getCvv() != cvv){
+            return new ResponseEntity<>("The cvv is incorrect", HttpStatus.FORBIDDEN);
+        }
+        boolean paymentSuccessful = false;
+        for(Account account : client.getAccounts()){
+            if(account.getBalance() >= amount){
+                Transaction transaction = new Transaction(TransactionType.DEBIT, -amount, description + account.getNumber(), LocalDate.now());
+                transaction.setAmountAccount(account.getBalance() - amount);
+                account.addTransactions(transaction);
+                account.setBalance(account.getBalance() - amount);
+                transactionService.save(transaction);
+                accountService.save(account);
+                paymentSuccessful = true;
+                break;
+            }
+        }
+        if(!paymentSuccessful){
+            return new ResponseEntity<>("No account has sufficient balance for the payment", HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

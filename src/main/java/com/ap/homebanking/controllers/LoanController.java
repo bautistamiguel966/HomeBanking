@@ -28,13 +28,36 @@ public class LoanController {
     @Autowired
     private TransactionService transactionService;
 
-//    @RequestMapping(path = "/loans", method = RequestMethod.GET)
+
     @GetMapping("/loans")
     public ResponseEntity<List<LoanDTO>> getLoans(){
         return ResponseEntity.ok(loanService.getLoansDTO());
     }
+    @PostMapping("/loans/create")
+    public ResponseEntity<Object> createLoan(@RequestParam String name, @RequestParam double maxAmount, @RequestParam double percentage, @RequestParam List<Integer> payments){
+        if (name.isBlank()){
+            return new ResponseEntity<>("Name cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        if (maxAmount == 0){
+            return new ResponseEntity<>("Max amount cannot be 0", HttpStatus.FORBIDDEN);
+        }
+        if (maxAmount < 0){
+            return new ResponseEntity<>("Max amount cannot be negative", HttpStatus.FORBIDDEN);
+        }
+        if (percentage == 0){
+            return new ResponseEntity<>("Percentage cannot be 0", HttpStatus.FORBIDDEN);
+        }
+        if (percentage < 0){
+            return new ResponseEntity<>("Percentage cannot be negative", HttpStatus.FORBIDDEN);
+        }
+        if(payments.isEmpty()){
+            return new ResponseEntity<>("Payments cannot be empty", HttpStatus.FORBIDDEN);
+        }
+        Loan loan = new Loan(name, maxAmount, payments, percentage);
+        loanService.save(loan);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
     @Transactional
-//    @RequestMapping(path = "/loans", method = RequestMethod.POST)
     @PostMapping("/loans")
     public ResponseEntity<Object> applyForLoan(Authentication authentication, @RequestBody LoanApplicationDTO loanApplicationDTO){
         Client client = clientService.findByEmail(authentication.getName());
@@ -82,7 +105,12 @@ public class LoanController {
             return new ResponseEntity<>("Not available", HttpStatus.FORBIDDEN);
         }
 
-        ClientLoan clientLoan = new ClientLoan((loanApplicationDTO.getAmount() + loanApplicationDTO.getAmount() * 0.2), loanApplicationDTO.getPayments());
+//        ClientLoan clientLoan = new ClientLoan((loanApplicationDTO.getAmount() + loanApplicationDTO.getAmount() * 0.2),
+//                loanApplicationDTO.getPayments());
+        ClientLoan clientLoan = new ClientLoan((loanApplicationDTO.getAmount() +
+                (loanApplicationDTO.getAmount() * (loan.getPercentage() / 100))),
+                loanApplicationDTO.getPayments());
+
         client.addClientLoans(clientLoan);
         loan.addClientLoans(clientLoan);
         Transaction transaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), loan.getName() + " Loan approved", LocalDate.now());

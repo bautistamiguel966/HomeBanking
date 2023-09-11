@@ -1,0 +1,121 @@
+
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+}
+
+.menu-logo {
+    width: 100px;
+    height: 40px;
+}
+
+.confainer-fluid{
+    display: flex;
+
+}
+
+/* Cards de account y loan */
+h2{
+    text-align: center;
+}
+
+
+/* NAV */
+
+.navbar {
+    margin: 0;
+    padding: 0;
+    width: 90%;
+    
+}
+#header{
+    display: flex;
+    justify-content: center;
+    background-color: #F5F5F5;
+}
+
+/* FOOTER */
+#footer{
+    display: flex;
+    align-content: center;
+    /* background-color:  #e7c6ff; */
+    background-color: #F5F5F5;
+    margin-top: 2.6%;
+}
+.social{
+    display: flex;
+    justify-content: center;
+}
+#rights{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+#rights p{
+    font-size: 1.2em;
+}
+
+/* CREAR CARD */
+#crear-card, #crear-loans{
+    display: flex;
+    justify-content: center;
+}
+
+#crear-card form, #crear-payment form, #crear-loans form{
+    display: flex;
+    flex-direction: column;
+}
+
+.col-crear{
+    margin-top: 1.5%;
+}
+#col-crear{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    background-color: #6c757d;
+    color: white;
+    height: 74.5vh;
+}
+#create-loan{
+    width: 35%;
+    align-self: center;
+}
+
+#checkbox{
+    display: flex;
+    gap: 1%;
+}
+form label{
+    display: flex;
+    justify-content: center;
+}
+form .row.mb-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+@media(max-width: 850px){
+    #create-loan{
+        width: 80%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

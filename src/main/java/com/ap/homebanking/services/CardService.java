@@ -15,4 +15,8 @@ public interface CardService {
     boolean exist(CardType type, CardColor color, Client client);
 
     void delete(long cardId);
+
+    boolean existByNumberAndClient(String number, Client client);
+
+    Card findByNumber(String number);
 }

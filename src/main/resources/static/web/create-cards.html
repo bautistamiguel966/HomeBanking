@@ -28,47 +28,57 @@
         </div>
         <div class="container-fluid" id="container-create-cards">
             <div class="row" id="header">
-                <div class="col-lg-3" id="logo">
-                    <a href="/web/accounts.html">
-                        <img class="menu-logo" src="img/Mindhub-logo.png">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="navbar-brand" href="/web/accounts.html">
+                        <img class="menu-logo" src="img/Mindhub-logo.png" alt="Logo">
                     </a>
-                </div>
-                <div class="col-lg-5" id="opciones">
-                    <ul class="nav nav-pills">
-                        <li class="nav-item">
-                            <a href="/web/accounts.html" class="nav-link">
-                                <i class="bi bi-inboxes"></i>
-                                Accounts
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/web/cards.html" class="nav-link link-dark">
-                                <i class="bi bi-credit-card"></i>
-                                Cards
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/web/transfers.html" class="nav-link link-dark">
-                                <i class="bi bi-box-arrow-right"></i>
-                                Transfers
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/web/loan-application.html" class="nav-link link-dark">
-                                <i class="bi bi-cash"></i>
-                                Loans
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn btn-danger" v-on:click="signOut">Sign out</button>
-                        </li>
-                    </ul>
-                </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="/web/accounts.html" class="nav-link">
+                                    <i class="bi bi-inboxes"></i>
+                                    Accounts
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/web/cards.html" class="nav-link">
+                                    <i class="bi bi-credit-card"></i>
+                                    Cards
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/web/transfers.html" class="nav-link">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    Transfers
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/web/loan-application.html" class="nav-link active">
+                                    <i class="bi bi-cash"></i>
+                                    Loans
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/web/payments.html" class="nav-link link-dark">
+                                    <i class="bi bi-cash"></i>
+                                    Payments
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <button class="btn btn-danger" @click="signOut">Sign out</button>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
             <div class="row mt-3" id="crear-card">
-                <div class="col-6" id="col-crear">
+                <div class="col-6 col-crear" id="col-crear">
                     <h2 class="display-6 subtitle">Create cards</h2>
-                    <form class="mt-4" v-on:submit="create($event)" id="form-accounts">
+                    <form class="mt-4" v-on:submit="create($event)" id="form-cards">
                         <div class="row mb-3">
                             <label for="card-type" class="col-sm-4 col-form-label ">Card type:</label>
                             <div class="col-sm-7">

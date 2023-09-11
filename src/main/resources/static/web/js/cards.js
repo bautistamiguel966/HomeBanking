@@ -13,7 +13,6 @@ Vue.createApp({
         getData: function () {
             axios.get("/api/clients/current")
                 .then((response) => {
-                    //get client ifo
                     this.clientInfo = response.data;
                     this.creditCards = this.clientInfo.cards.filter(card => card.type == "CREDIT");
                     this.debitCards = this.clientInfo.cards.filter(card => card.type == "DEBIT");

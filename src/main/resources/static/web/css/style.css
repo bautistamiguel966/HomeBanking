@@ -8,7 +8,9 @@
 .account {
     /* background: linear-gradient(45deg, #ee0979, #ff6a00); */
     /* background-color:  #b77ce1; */
-    background-color:  #a360d2;
+    /* background-color:  #a360d2; */
+    /* background-color: #333333; */
+    background-color: #6c757d;
     color: white;
     box-shadow: 1px 1px 5px black;
 }
@@ -66,12 +68,6 @@
 .welcome-logo {
     width: 60%;
 }
-/* 
-.index-body {
-    background-image: url(../img/mindhub.jpg);
-    background-size: cover;
-    background-attachment: fixed;
-} */
 
 .index-container {
     margin-top: 10%;
@@ -84,7 +80,9 @@
 /* ESTILO DEL INDEX */
 .index-body{
     /* background-color: #e4c1f9; */
-    background-color:  #e7c6ff;
+    /* background-color:  #e7c6ff; */
+    /* background-color: #f8f9fa; */
+    background-color: #F5F5F5;
 }
 
 .divider:after,
@@ -113,34 +111,6 @@ height: calc(100% - 73px);
     text-align: center;
 }
 
-/* NAV BAR */
-
-#header{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color:  #e7c6ff;
-    height: 10vh;
-}
-
-ul {
-    list-style: none;
-}
-
-#opciones{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-}
-#opciones ul{
-    display: flex;
-    justify-content: center;
-}
-#opciones ul li {
-    display: flex;
-    justify-content: center;
-}
 h1{
     text-align: center;
 }
@@ -172,12 +142,29 @@ h2{
     display: flex;
     justify-content: space-around;
 }
+
+/* NAV */
+/* nav{
+    background-color: #F5F5F5;
+} */
+.navbar {
+    margin: 0;
+    padding: 0;
+    width: 90%;
+    
+}
+#header{
+    display: flex;
+    justify-content: center;
+    background-color: #F5F5F5;
+}
+
 /* FOOTER */
 #footer{
     display: flex;
     align-content: center;
-    /* background-color: #eaf4f4; */
-    background-color:  #e7c6ff;
+    /* background-color:  #e7c6ff; */
+    background-color: #F5F5F5;
     margin-top: 2.6%;
 }
 .social{
@@ -211,27 +198,56 @@ h2{
 }
 
 
+
+#crear-payment{
+    display: flex;
+    justify-content: center;
+}
 /* CREAR CARD */
 #crear-card{
     display: flex;
     justify-content: center;
 }
-#crear-card form{
+
+#crear-card form, #crear-payment form{
     display: flex;
     flex-direction: column;
+}
+form label, form input{
+    display: flex;
     justify-content: center;
+}
+
+form .row.mb-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+/* SOLO PARA CREATE CARDS, CREATE ACCOUNTS Y PAYMENT */
+.col-crear{
+    margin-top: 1.5%;
 }
 #col-crear{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
-    background-color: #e7c6ff;
+    /* background-color: #e7c6ff; */
+    /* background-color: #adb5bd; */
+    background-color: #6c757d;
+    color: white;
     height: 74.5vh;
 }
-#create-card{
+#create-card, #create-account, #create-payment{
     width: 50%;
     align-self: center;
+}
+#create-account{
+    margin-top: 8%;
+}
+#create-card{
+    margin-top: 12%;
 }
 
 #create{
@@ -240,9 +256,11 @@ h2{
 }
 
 #col-img-transfer{
+    margin-top: 2%;
     width:40%;
     height:500px;
-    background-image: url('/web/img/transfer-2.jpg');
+    /* background-image: url('/web/img/transfer-2.jpg'); */
+    background-image: url('/web/img/transfer3.jpg');
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
@@ -253,6 +271,16 @@ h2{
     justify-content: space-around;
     margin: 2.9%;
 }
+#fondo{
+    background-color: #6c757d;
+    color: white;
+}
+
+#info{
+    display: flex;
+    justify-content: center;
+}
+
  /* PARA LOAN APPLY */
 
 #row-loanApply{
@@ -261,27 +289,30 @@ h2{
     margin: 2.2%;
 }
 
-/* #row-loanApply form{
-    display: flex;
-    flex-direction: column;
-    
-} */
 #row-loanApply form div{
     margin-top: 5%;
 }
 #col-img-loan{
+    margin-top: 2%;
     width:30%;
     height:500px;
-    background-image: url('/web/img/Loan.jpg');
+    /* background-image: url('/web/img/Loan.jpg'); */
+    background-image: url('/web/img/loan3.jpg');
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
 }
 
+#form-loanAplication{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 #btn-delete{
     margin-left: 2%;
     justify-content: center;
-    width: 10%;
+    width: 15%;
     border-radius: 10%;
 }
 #btn-delete-account{
@@ -294,8 +325,50 @@ h2{
     color: red;
 }
 
+#img-index{
+    height: 100vh;
+}
+
+#row-index{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
 @media (max-width: 450px) {
 .h-custom {
 height: 100%;
 }
 }
+
+@media(max-width: 991px){
+    #col-img-transfer{
+        width:100%;
+        height:300px;
+        background-size:cover;
+        background-position:center;
+        background-repeat:no-repeat;
+    }
+    .navbar{
+        justify-content: center;
+    }
+    #col-img-loan{
+        margin-top: 2%;
+        width:97%;
+        height:400px;
+    }
+    /* #col-img{
+        width: 100%;
+    } */
+    #img-index{
+        margin-top: 2%;
+        width: 100%;
+    }
+}
+
+@media(max-width: 850px){
+    #create-card, #create-account, #create-payment{
+        width: 100%;
+    }
+}
+
+

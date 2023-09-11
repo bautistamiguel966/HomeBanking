@@ -2,6 +2,7 @@ package com.ap.homebanking.controllers;
 
 import com.ap.homebanking.dtos.ClientDTO;
 import com.ap.homebanking.models.Account;
+import com.ap.homebanking.models.AccountType;
 import com.ap.homebanking.models.Client;
 import com.ap.homebanking.services.AccountService;
 import com.ap.homebanking.services.ClientService;
@@ -55,7 +56,7 @@ public class ClientController {
         // Generar un número aleatorio entre 10000 y 99999999
         int randomNumber = random.nextInt((int)Math.pow(10, maxDigits) - (int)Math.pow(10, minDigits)) + (int)Math.pow(10, minDigits);
         String accountNumber = "VIN" + randomNumber;
-        Account account = new Account(accountNumber, LocalDate.now(), 0);
+        Account account = new Account(accountNumber, LocalDate.now(), 0, AccountType.CHECKING);
 
         accountService.save(account);
         client.addAccount(account);

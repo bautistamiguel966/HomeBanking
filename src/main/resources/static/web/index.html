@@ -14,14 +14,23 @@
 
 <body class="index-body">
     <div class="vh-100" id="app">
-        <div class="container-fluid h-custom">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img src="./img/banner-inicio.svg"
-                        class="img-fluid" alt="Banner">
+        <div class="toast-container position-absolute p-3 top-0 end-0" id="toastPlacement">
+            <div id="danger-toast" data-bs-delay="2000" class="toast align-items-center text-white bg-danger border-0"
+                role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {{ errorMsg }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
                 </div>
-                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            </div>
+        </div>
+        <div class="container-fluid h-custom">
+            <div class="row  h-100" id="row-index">
+                <div class="col-lg-6 col-md-8 col-xl-4 offset-xl-1">
                     <template v-if="!showSignUp">
+                        <h1>Mindhub Bank</h1>
                         <div class="d-flex">
                             <div class="w-100">
                                 <h3 class="mb-4">Sign In</h3>
@@ -38,9 +47,8 @@
                                 <input v-model="password" id="password" type="password" class="form-control"
                                     placeholder="Password" required autocomplete="off">
                             </div>
-    
                             <div class="text-center text-lg-start mt-4 pt-2" id="div-botones">
-                                <button type="submit" class="btn btn-light">Sign In</button>    
+                                <button type="submit" class="btn btn-secondary">Sign In</button>    
                             </div>
                         </form>
                     </template>
@@ -72,23 +80,29 @@
                                     placeholder="Password" required autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="form-control btn btn-light px-3">Sign Up</button>
+                                <button type="submit" class="form-control btn btn-secondary px-3">Sign Up</button>
                             </div>
                         </form>
                     </template>
-
                     <div v-if="showSignUp" class="form-group">
                         <div class="div mensaje">
                             <p>Do you already have an account?</p>
                         </div>
-                        <button v-on:click="showSignUpToogle" href="#" class="btn btn-light my-2">Sign In</button>
+                        <button v-on:click="showSignUpToogle" href="#" class="btn btn-secondary my-2">Sign In</button>
                     </div>
                     <template v-if="!showSignUp">
                         <div class="div mensaje">
                             <p>Don't have an account?</p>
                         </div>
-                        <button v-on:click="showSignUpToogle" class="btn btn-light">Sign Up</button>
+                        <button v-on:click="showSignUpToogle" class="btn btn-secondary">Sign Up</button>
                     </template>
+                </div>
+
+                <div class="col-lg-6 col-md-10 col-xl-5" id="col-img">
+                        <img src="./img/bank5.jpg"
+                        class="img-fluid" alt="Banner" id="img-index">
+                        <!-- <img src="./img/bank8.jpg"
+                        class="img-fluid" alt="Banner" id="img-index"> -->
                 </div>
             </div>
         </div>

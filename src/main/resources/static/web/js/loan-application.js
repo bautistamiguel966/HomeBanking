@@ -11,14 +11,14 @@ Vue.createApp({
             accountToNumber: "VIN",
             amount: 0,
             totalLoan: 0,
-            fees: []
+            fees: [],
+            percentage : 0,
         }
     },
     methods: {
         getData: function () {
             Promise.all([axios.get("/api/loans"), axios.get("/api/clients/current/accounts")])
                 .then((response) => {
-                    //get loan types ifo
                     this.loanTypes = response[0].data;
                     this.clientAccounts = response[1].data;
                 })
@@ -63,13 +63,15 @@ Vue.createApp({
         },
         changedType: function () {
             this.paymentsList = this.loanTypes.find(loanType => loanType.id == this.loanTypeId).payments;
+            this.percentage = this.loanTypes.find(loanType => loanType.id == this.loanTypeId).percentage;
         },
         finish: function () {
             window.location.reload();
         },
         checkFees: function () {
             this.fees = [];
-            this.totalLoan = parseInt(this.amount) + (this.amount * 0.2);
+            // this.totalLoan = parseInt(this.amount) + (this.amount * 0.2);
+            this.totalLoan = parseInt(this.amount) + (this.amount * (this.percentage / 100));
             let amount = this.totalLoan / this.payments;
             for (let i = 1; i <= this.payments; i++) {
                 this.fees.push({ amount: amount });
